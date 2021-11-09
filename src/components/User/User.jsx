@@ -1,11 +1,11 @@
 import React from 'react'
+import './User.css';
 
 const User = ({ userName, age }) => {
     return (
-        <div>
-            <div>Username: {userName}</div>
-            <div>age: {age}</div>
-        </div>
+        <li>
+            {userName} ({age} years old)
+        </li>
     )
 }
 
