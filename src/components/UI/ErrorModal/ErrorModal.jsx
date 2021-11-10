@@ -1,24 +1,18 @@
 import React from 'react'
-import Button from '../Button/Button';
-import Card from '../Card/Card';
+import ReactDOM from 'react-dom';
+
+
+
 import './ErrorModal.css';
+import Backdrop from '../Backdrop/Backdrop';
+import ModalOverlay from '../ModalOverlay/ModalOverlay';
 
 const ErrorModal = (props) => {
     return (
-        <div>
-            <div className="backdrop" onClick={props.onError} />
-            <Card className="modal" >
-                <header className="header">
-                    <h2>{props.title}</h2>
-                </header>
-                <div className="content">
-                    <p>{props.message}</p>
-                </div>
-                <footer className="actions">
-                    <Button onClick={props.onError}>Okay</Button>
-                </footer>
-            </Card>
-        </div>
+        <React.Fragment>
+            {ReactDOM.createPortal(<Backdrop onError={props.onError} />, document.getElementById('backdrop-root'))}
+            {ReactDOM.createPortal(<ModalOverlay onError={props.onError} message={props.message} title={props.title}/>, document.getElementById('overlay-root'))}
+        </React.Fragment>
     )
 }
 
