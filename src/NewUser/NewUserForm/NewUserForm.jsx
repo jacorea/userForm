@@ -6,7 +6,8 @@ import './NewUserForm.css';
 
 const NewUserForm = (props) => {
 
-    const [ userInput, setUserInput] = useState({ userName: '', age: '' })
+    const [ userInput, setUserInput] = useState({ userName: '', age: '' });
+    const [ error, setError ] = useState();
 
     const inputChangeHandler = (e) => {        
         setUserInput((prevState)=>(
@@ -24,10 +25,18 @@ const NewUserForm = (props) => {
             age: Number(age)
         }
         if (userName.trim().length === 0 || age.trim().length === 0) {
+            setError({
+                title: 'Invalid input',
+                message: 'Please enter a valid name and age (non-empty values).'
+            })
             return;
         }
         if (Number(age) < 1) {
-            return
+            setError({
+                title: 'Invalid age',
+                message: 'Please enter a valid age (age > 0)'
+            })
+            return;
         }
 
         props.addUser(userData);
@@ -37,16 +46,20 @@ const NewUserForm = (props) => {
         ))
     }
 
+    const handleError = () => {
+        setError(undefined)
+    }
+
     const { userName, age } = userInput;
     return (
         <div>
-            <ErrorModal title="error title" message="something went wrong" />
+            {error && <ErrorModal title={error.title} message={error.message} onError={handleError}/>}
             <Card className="input">
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="username">Username</label>
                     <input id="username" type="text" name='userName' value={userName} onChange={inputChangeHandler}  />
                     <label htmlFor="age">Age(years)</label>
-                    <input id="age" type="number" min='0' step='1' name='age' value={age} onChange={inputChangeHandler}  />
+                    <input id="age" type="number" step='1' name='age' value={age} onChange={inputChangeHandler}  />
                     <div>
                         <Button type="submit" > Add User</Button>
                     </div>
